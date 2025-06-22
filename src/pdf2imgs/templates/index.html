@@ -1,0 +1,126 @@
+<!doctype html>
+<html>
+<head>
+    <title>DeepPanel prediction results</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<style>
+    body {
+        display: flex;
+        min-height: 110vh;
+        flex-direction: column;
+    }
+
+    main {
+        flex: 1 0 auto;
+    }
+    th img {
+        height: 224px;
+    }
+    /* 调整modal弹窗尺寸为适中宽高 */
+    .modal {
+        max-width: 80vw !important;
+        width: 80vw !important;
+        max-height: 85vh !important;
+        height: 85vh !important;
+        top: 7.5vh !important;
+    }
+    .modal-content {
+        max-height: 78vh !important;
+        overflow-y: auto;
+    }
+</style>
+<body>
+<nav>
+    <div class="nav-wrapper indigo darken-3">
+        <a href="#" class="brand-logo left">DeepPanel</a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li><a href="https://github.com/pedrovgs/DeepPanel" target="_blank">Documentation</a></li>
+        </ul>
+    </div>
+</nav>
+<main class="container">
+    <div class="section">
+        <table class="highlight responsive-table">
+            <thead>
+            <h5 class="indigo-text darken-3">Prediction results:</h5>
+            <tr>
+                <th>文件名</th>
+                <th>Page</th>
+                <th>Prediction</th>
+                <th>Mask</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for prediction in predictions -%}
+            <tr>
+                <th>{{ prediction.page }}</th>
+                <th>
+                    <a class="modal-trigger" href="#page_modal_{{ loop.index0 }}"><img src="../imgs/{{ prediction.page }}" style="cursor:pointer; max-width:95vw; max-height:90vh; display:block; margin:auto;"></a>
+                    <div id="page_modal_{{ loop.index0 }}" class="modal">
+                        <div class="modal-content" style="text-align:center;">
+                            <img src="../imgs/{{ prediction.page }}" style="max-width:95vw; max-height:90vh; display:block; margin:auto; height:auto !important;">
+                        </div>
+                        <div class="modal-footer">
+                            <a href="#!" class="modal-close btn-flat">关闭</a>
+                        </div>
+                    </div>
+                </th>
+                <th>
+                    <a class="modal-trigger" href="#pred_modal_{{ loop.index0 }}"><img src="../output/{{ prediction.pred }}" style="cursor:pointer; max-width:95vw; max-height:90vh; display:block; margin:auto;"></a>
+                    <div id="pred_modal_{{ loop.index0 }}" class="modal">
+                        <div class="modal-content" style="text-align:center;">
+                            <img src="../output/{{ prediction.pred }}" style="max-width:95vw; max-height:90vh; display:block; margin:auto; height:auto !important;">
+                        </div>
+                        <div class="modal-footer">
+                            <a href="#!" class="modal-close btn-flat">关闭</a>
+                        </div>
+                    </div>
+                </th>
+                <th>
+                    <a class="btn modal-trigger" href="#modal_{{ loop.index0 }}">查看分镜</a>
+                    <div id="modal_{{ loop.index0 }}" class="modal">
+                        <div class="modal-content">
+                            <h5>分镜图片列表</h5>
+                            <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                                {% for panel_path in prediction.panels %}
+                                    <img src="{{ panel_path }}" style="height: 180px; margin: 5px;">
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <a href="#!" class="modal-close btn-flat">关闭</a>
+                        </div>
+                    </div>
+                </th>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</main>
+<footer class="page-footer indigo darken-3">
+    <div class="container">
+        <div class="row">
+            <h5 class="white-text">Contributions</h5>
+            <p class="grey-text text-lighten-4">
+                We are trying to improve this project. Do
+                you wanna help? Feel free to propose any change or send a pull request in the <a
+                    class="grey-text text-lighten-3"
+                    href="https://github.com/pedrovgs/DeepPanel" target="_blank">project GitHub
+                repository.</a>
+            </p>
+        </div>
+    </div>
+
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('.modal').modal();
+});
+</script>
+</body>
+</html>
